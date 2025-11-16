@@ -18,10 +18,12 @@ Users simply provide a text description or select from a library of existing des
 
 ## Current Status
 
-**Phase**: Planning & POC Development
-**Milestone**: [POC: End-to-End Pipeline](https://github.com/dm-spiideo/LeSing/milestone/1)
+**Phase**: POC Development
+**Active Features**:
+- 001-ai-image-generation (✅ Completed)
+- 002-3d-model-pipeline (🚧 In Development)
 
-Currently implementing proof-of-concept for the complete pipeline: text prompt → image generation → 2D conversion → simple 3D model → physical print.
+Currently implementing the 3D Model Pipeline that converts AI-generated 2D images into printable 3D models and G-code for the Bambu Lab H2D printer.
 
 ## Documentation
 
@@ -38,10 +40,13 @@ LeSign is built on **modular, independent components** organized in three layers
 - Payment Processing - Transaction handling
 
 ### Processing Layer
-- AI Image Generation - Text-to-image using diffusion models
-- Design Library - Design storage and management
-- 3D Model Pipeline - Image → 2D → 3D → G-code conversion
-- Job Orchestration - Print queue and workflow coordination
+- **AI Image Generation** - Text-to-image using DALL-E 3 API ✅ Implemented
+- **Design Library** - Design storage and management (Planned)
+- **3D Model Pipeline** - Image → Vector → 3D → G-code conversion 🚧 In Development
+  - model-converter: VTracer + Build123d + Manifold3D
+  - slicer: PrusaSlicer CLI wrapper
+  - shared: Common utilities and models
+- **Job Orchestration** - Print queue and workflow coordination (Planned)
 
 ### Hardware Layer
 - Printer Control - Direct 3D printer communication
@@ -61,14 +66,33 @@ See [Constitution](.specify/memory/constitution.md) for detailed principles and 
 
 ```
 lesign/
-├── frontend/           # Web UI and payment integration
-├── backend/            # Processing pipeline (AI, 3D conversion, queue)
-├── printer-agent/      # Local 3D printer integration
-├── shared/             # Shared libraries and utilities
-├── infrastructure/     # IaC and deployment configs
-└── docs/              # Documentation and specifications
+├── backend/
+│   ├── ai-generation/      # DALL-E 3 image generation (Python 3.11+)
+│   ├── model-converter/    # Image→Vector→3D conversion (Python 3.12)
+│   ├── slicer/            # 3D→G-code generation (Python 3.12)
+│   └── shared/            # Shared utilities
+├── specs/                 # Feature specifications
+├── investigations/        # Research artifacts
+└── .github/              # CI/CD workflows
 ```
 
 ## Getting Started
 
-Currently in planning phase. See [all issues](https://github.com/dm-spiideo/LeSing/issues) or track progress on the [POC milestone](https://github.com/dm-spiideo/LeSing/milestone/1).
+### For Developers
+
+**AI Image Generation**:
+- See [backend/ai-generation/README.md](backend/ai-generation/README.md)
+- Python 3.11+ with OpenAI API integration
+- 95 tests, 91% coverage
+
+**3D Model Pipeline**:
+- See [specs/002-3d-model-pipeline/quickstart.md](specs/002-3d-model-pipeline/quickstart.md)
+- Python 3.12 with VTracer, Build123d, PrusaSlicer CLI
+- TDD approach with >90% coverage target
+
+### Documentation
+
+- [OVERVIEW.md](OVERVIEW.md) - Project architecture and components
+- [PLAN.md](PLAN.md) - Component implementation tracking
+- [specs/](specs/) - Feature specifications
+- [Constitution](.specify/memory/constitution.md) - Development principles

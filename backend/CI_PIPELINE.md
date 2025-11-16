@@ -1,5 +1,15 @@
 # GitHub Issue: Set Up Continuous Integration Pipeline for Python Backend
 
+**Status**: ✅ Completed for `backend/ai-generation`
+**See**: `.github/workflows/python-ci.yml`
+
+**Next**: Extend CI to cover 3D Model Pipeline components (`backend/model-converter`, `backend/slicer`)
+**See**: `.github/workflows/python-ci-3d-pipeline.yml`
+
+---
+
+## Original Issue Description
+
 **Title**: Set up GitHub Actions CI pipeline for AI image generation backend
 
 **Labels**: enhancement, infrastructure, ci/cd, good-first-issue
