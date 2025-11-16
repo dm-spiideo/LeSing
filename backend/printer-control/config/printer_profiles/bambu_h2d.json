@@ -1,0 +1,32 @@
+{
+  "printer_id": "bambu_h2d_01",
+  "name": "Bambu Lab H2D #1",
+  "model": "Bambu Lab H2D",
+  "ip": "192.168.1.100",
+  "access_code": "CHANGE_ME",
+  "serial": "01P00A000000000",
+  "capabilities": {
+    "build_volume": {
+      "x": 256,
+      "y": 256,
+      "z": 256
+    },
+    "materials": ["PLA", "PETG", "ABS", "TPU"],
+    "max_temp_nozzle": 300,
+    "max_temp_bed": 110,
+    "has_filament_sensor": true,
+    "has_camera": true
+  },
+  "mqtt": {
+    "port": 8883,
+    "use_tls": true,
+    "keepalive": 60,
+    "timeout": 30
+  },
+  "ftp": {
+    "port": 990,
+    "use_tls": true,
+    "timeout": 30
+  },
+  "status_poll_interval": 5.0
+}

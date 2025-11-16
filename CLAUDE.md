@@ -26,6 +26,17 @@ Auto-generated from all feature plans. Last updated: 2025-11-16
 - pytest (testing, >90% coverage)
 - ruff (linting)
 
+### 003-printer-control
+- Python 3.12
+- bambulabs-api (Bambu Lab printer control)
+- pydantic (data validation)
+- paho-mqtt (MQTT protocol)
+- tenacity (retry logic)
+- structlog (structured logging)
+- pytest (testing, >90% coverage)
+- ruff (linting)
+- mypy (type checking)
+
 ## Project Structure
 
 ```text
@@ -33,11 +44,13 @@ backend/
 ├── ai-generation/      # Feature 001: AI image generation
 ├── model-converter/    # Feature 002: Vector and 3D conversion
 ├── slicer/            # Feature 002: G-code generation
-└── shared/            # Feature 002: Shared utilities
+├── shared/            # Feature 002: Shared utilities
+└── printer-control/   # Feature 003: Bambu Lab printer control
 
 specs/
 ├── 001-ai-image-generation/
-└── 002-3d-model-pipeline/
+├── 002-3d-model-pipeline/
+└── 003-printer-control/
 ```
 
 ## Commands
@@ -61,6 +74,15 @@ pytest                    # Run tests
 ruff check src/ tests/    # Lint code
 ```
 
+### Printer Control (backend/printer-control)
+```bash
+cd backend/printer-control
+uv sync                   # Install dependencies
+uv run pytest             # Run tests with coverage (>90% target)
+ruff check src/ tests/    # Lint code
+mypy src/                 # Type check
+```
+
 ## Code Style
 
 - Python 3.11+ (ai-generation): Follow standard conventions
@@ -69,6 +91,7 @@ ruff check src/ tests/    # Lint code
 
 ## Recent Changes
 
+- 003-printer-control: Added Bambu Lab H2D printer control with MQTT/FTP, job queue, and monitoring
 - 002-3d-model-pipeline: Added 3D conversion pipeline with VTracer, Build123d, Manifold3D, PrusaSlicer
 - 001-ai-image-generation: Added DALL-E 3 integration with comprehensive testing
 
