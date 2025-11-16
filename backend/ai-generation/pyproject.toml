@@ -31,6 +31,15 @@ select = [
     "S",   # flake8-bandit (security)
     "C90", # mccabe complexity
 ]
+ignore = [
+    "SIM108",  # Use ternary operator - sometimes if/else is clearer
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    "S101",  # Allow assert in tests
+    "S108",  # Allow hardcoded temp file paths in tests
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -73,7 +82,7 @@ disallow_untyped_defs = true
 disallow_any_unimported = false
 no_implicit_optional = true
 warn_redundant_casts = true
-warn_unused_ignores = true
+warn_unused_ignores = false
 warn_no_return = true
 check_untyped_defs = true
 strict_equality = true

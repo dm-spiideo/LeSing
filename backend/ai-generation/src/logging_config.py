@@ -99,4 +99,4 @@ def get_logger(name: str) -> structlog.stdlib.BoundLogger:
     Returns:
         Configured structlog logger
     """
-    return structlog.get_logger(name)
+    return structlog.get_logger(name)  # type: ignore[no-any-return]

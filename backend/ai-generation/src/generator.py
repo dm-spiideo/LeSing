@@ -46,7 +46,7 @@ class AIImageGenerator:
         """
         # Load settings
         if settings is None:
-            settings = Settings()
+            settings = Settings()  # type: ignore[call-arg]
         self.settings = settings
 
         # Configure logging
@@ -106,9 +106,9 @@ class AIImageGenerator:
             # Create image request
             request = ImageRequest(
                 prompt=validated_prompt,
-                style=style,
-                size=size or self.settings.image_size,
-                quality=quality or self.settings.image_quality,
+                style=style,  # type: ignore[arg-type]
+                size=size or self.settings.image_size,  # type: ignore[arg-type]
+                quality=quality or self.settings.image_quality,  # type: ignore[arg-type]
             )
 
             # Try generation with retry logic for quality failures

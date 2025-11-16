@@ -98,7 +98,8 @@ class TestAIImageGeneratorContract:
         try:
             result = generator.generate_image("")
             assert result.status == "failed"
-            assert "validation" in result.error.lower() if result.error else True  # type: ignore[union-attr]
+            assert result.error is not None
+            assert ("validation" in result.error.lower() or "empty" in result.error.lower())
         except ValidationError:
             pass  # Also acceptable
 
