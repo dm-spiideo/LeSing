@@ -41,7 +41,10 @@ def mock_api_response() -> dict[str, Any]:
         "data": [
             {
                 "url": "https://example.com/generated-image.png",
-                "revised_prompt": "A modern, minimalist name sign displaying 'SARAH' in clean, elegant typography suitable for 3D printing",
+                "revised_prompt": (
+                    "A modern, minimalist name sign displaying 'SARAH' in clean, "
+                    "elegant typography suitable for 3D printing"
+                ),
             }
         ],
     }
