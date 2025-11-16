@@ -61,8 +61,8 @@ class OpenAIClient:
             response = self.client.images.generate(
                 model="dall-e-3",
                 prompt=prompt,
-                size=size,
-                quality=quality,
+                size=size,  # type: ignore[arg-type]
+                quality=quality,  # type: ignore[arg-type]
                 n=1,
             )
 
