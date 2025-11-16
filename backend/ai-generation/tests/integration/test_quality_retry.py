@@ -4,7 +4,6 @@ Tests the retry behavior when quality validation fails.
 """
 
 from pathlib import Path
-from unittest.mock import Mock, patch
 
 import httpx
 import pytest
@@ -76,9 +75,7 @@ class TestQualityRetry:
         assert result is not None
 
     @respx.mock
-    def test_max_retries_stops_execution(
-        self, generator: AIImageGenerator, respx_mock: MockRouter
-    ) -> None:
+    def test_max_retries_stops_execution(self, generator: AIImageGenerator, respx_mock: MockRouter) -> None:
         """Test that retry stops after max attempts."""
         import io
 

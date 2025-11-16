@@ -10,7 +10,6 @@ Tests cover:
 
 import json
 from pathlib import Path
-from unittest.mock import Mock, mock_open, patch
 from uuid import uuid4
 
 import pytest
@@ -41,9 +40,7 @@ class TestStorageManager:
     def test_generate_filename_with_spaces(self, manager: StorageManager) -> None:
         """Test filename generation with multi-word prompt."""
         request_id = uuid4()
-        filename = manager.generate_filename(
-            request_id=request_id, prompt="Welcome Home"
-        )
+        filename = manager.generate_filename(request_id=request_id, prompt="Welcome Home")
 
         # Spaces should be converted to hyphens or underscores
         assert "welcome" in filename.lower()
@@ -68,9 +65,7 @@ class TestStorageManager:
 
         # Save image
         request_id = uuid4()
-        saved_path = manager.save_image(
-            image=image, request_id=request_id, prompt="SARAH"
-        )
+        saved_path = manager.save_image(image=image, request_id=request_id, prompt="SARAH")
 
         # Verify file was saved
         assert saved_path.exists()
@@ -91,9 +86,7 @@ class TestStorageManager:
         image_path = manager.storage_path / f"test_{request_id.hex[:8]}_sarah.png"
 
         # Save metadata
-        metadata_path = manager.save_metadata_json(
-            metadata=metadata, image_path=image_path
-        )
+        metadata_path = manager.save_metadata_json(metadata=metadata, image_path=image_path)
 
         # Verify metadata file was saved
         assert metadata_path.exists()
@@ -105,9 +98,7 @@ class TestStorageManager:
         assert loaded_metadata["prompt"] == "SARAH"
         assert loaded_metadata["model"] == "dall-e-3"
 
-    def test_ensure_output_directory_exists(
-        self, manager: StorageManager, temp_output_dir: Path
-    ) -> None:
+    def test_ensure_output_directory_exists(self, manager: StorageManager, temp_output_dir: Path) -> None:
         """Test that output directory is created if it doesn't exist."""
         # Remove directory if it exists
         if temp_output_dir.exists():
@@ -124,9 +115,7 @@ class TestStorageManager:
         # Directory should now exist
         assert temp_output_dir.exists()
 
-    def test_save_image_creates_directory(
-        self, test_settings, sample_image_path: Path
-    ) -> None:  # type: ignore[no-untyped-def]
+    def test_save_image_creates_directory(self, test_settings, sample_image_path: Path) -> None:  # type: ignore[no-untyped-def]
         """Test that save_image creates storage directory if missing."""
         from PIL import Image
 
@@ -145,9 +134,7 @@ class TestStorageManager:
 
         # Save should create directory
         request_id = uuid4()
-        saved_path = manager.save_image(
-            image=image, request_id=request_id, prompt="SARAH"
-        )
+        saved_path = manager.save_image(image=image, request_id=request_id, prompt="SARAH")
 
         # Verify directory and file exist
         assert non_existent_dir.exists()
@@ -157,9 +144,7 @@ class TestStorageManager:
         saved_path.unlink()
         non_existent_dir.rmdir()
 
-    def test_save_image_permission_error(
-        self, test_settings, sample_image_path: Path
-    ) -> None:  # type: ignore[no-untyped-def]
+    def test_save_image_permission_error(self, test_settings, sample_image_path: Path) -> None:  # type: ignore[no-untyped-def]
         """Test that permission errors raise StorageError."""
         from PIL import Image
 
@@ -174,6 +159,4 @@ class TestStorageManager:
         with pytest.raises(StorageError) as exc_info:
             manager.save_image(image=image, request_id=request_id, prompt="SARAH")
 
-        assert "storage" in str(exc_info.value).lower() or "permission" in str(
-            exc_info.value
-        ).lower()
+        assert "storage" in str(exc_info.value).lower() or "permission" in str(exc_info.value).lower()

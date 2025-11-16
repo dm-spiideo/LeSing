@@ -25,9 +25,7 @@ class TestValidationContract:
         assert hasattr(generator, "validate_image")
         assert callable(generator.validate_image)
 
-    def test_validate_image_accepts_path(
-        self, generator: AIImageGenerator, sample_image_path: Path
-    ) -> None:
+    def test_validate_image_accepts_path(self, generator: AIImageGenerator, sample_image_path: Path) -> None:
         """Test that validate_image accepts a Path parameter."""
         result = generator.validate_image(sample_image_path)
         assert result is not None
@@ -39,9 +37,7 @@ class TestValidationContract:
         result = generator.validate_image(sample_image_path)
         assert isinstance(result, QualityValidation)
 
-    def test_quality_validation_has_required_fields(
-        self, generator: AIImageGenerator, sample_image_path: Path
-    ) -> None:
+    def test_quality_validation_has_required_fields(self, generator: AIImageGenerator, sample_image_path: Path) -> None:
         """Test that QualityValidation has all required fields."""
         result = generator.validate_image(sample_image_path)
 
@@ -58,16 +54,12 @@ class TestValidationContract:
         assert hasattr(result, "quality_score")
         assert hasattr(result, "validation_passed")
 
-    def test_quality_score_is_between_zero_and_one(
-        self, generator: AIImageGenerator, sample_image_path: Path
-    ) -> None:
+    def test_quality_score_is_between_zero_and_one(self, generator: AIImageGenerator, sample_image_path: Path) -> None:
         """Test that quality_score is always between 0.0 and 1.0."""
         result = generator.validate_image(sample_image_path)
         assert 0.0 <= result.quality_score <= 1.0
 
-    def test_validation_passed_is_boolean(
-        self, generator: AIImageGenerator, sample_image_path: Path
-    ) -> None:
+    def test_validation_passed_is_boolean(self, generator: AIImageGenerator, sample_image_path: Path) -> None:
         """Test that validation_passed is a boolean."""
         result = generator.validate_image(sample_image_path)
         assert isinstance(result.validation_passed, bool)
@@ -82,9 +74,7 @@ class TestValidationContract:
         assert result.validation_passed is False
         assert result.quality_score == 0.0
 
-    def test_validate_image_with_valid_png(
-        self, generator: AIImageGenerator, sample_image_path: Path
-    ) -> None:
+    def test_validate_image_with_valid_png(self, generator: AIImageGenerator, sample_image_path: Path) -> None:
         """Test validation of a valid PNG image."""
         result = generator.validate_image(sample_image_path)
 
@@ -94,9 +84,7 @@ class TestValidationContract:
         assert result.validation_passed is True
         assert result.quality_score > 0.0
 
-    def test_validate_image_with_low_resolution(
-        self, generator: AIImageGenerator, tmp_path: Path
-    ) -> None:
+    def test_validate_image_with_low_resolution(self, generator: AIImageGenerator, tmp_path: Path) -> None:
         """Test validation fails for low-resolution images."""
         from PIL import Image
 

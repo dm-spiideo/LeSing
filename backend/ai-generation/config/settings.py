@@ -97,7 +97,8 @@ class Settings(BaseSettings):
         Returns:
             The API key string (decrypted from SecretStr)
         """
-        return self.openai_api_key.get_secret_value()
+        # Cast to str since Pydantic SecretStr.get_secret_value() returns str
+        return str(self.openai_api_key.get_secret_value())
 
     def ensure_storage_path_exists(self) -> Path:
         """Create storage path if it doesn't exist.
@@ -108,7 +109,7 @@ class Settings(BaseSettings):
         Raises:
             StorageError: If directory creation fails
         """
-        from ..src.exceptions import StorageError
+        from src.exceptions import StorageError
 
         try:
             absolute_path = self.storage_path.resolve()

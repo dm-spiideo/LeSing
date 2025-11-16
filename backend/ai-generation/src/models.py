@@ -53,9 +53,7 @@ class ImageRequest(BaseModel):
         import re
 
         if not re.match(r'^[a-zA-Z0-9\s\-\'",!.]+$', v):
-            raise ValueError(
-                "Prompt must contain only Latin characters, numbers, spaces, and basic punctuation"
-            )
+            raise ValueError("Prompt must contain only Latin characters, numbers, spaces, and basic punctuation")
 
         return v.strip()
 

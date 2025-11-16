@@ -74,12 +74,14 @@ class QualityValidator:
         )
 
         # Overall validation passed?
-        validation_passed = all([
-            file_exists,
-            file_readable,
-            format_valid,
-            resolution_met,
-        ])
+        validation_passed = all(
+            [
+                file_exists,
+                file_readable,
+                format_valid,
+                resolution_met,
+            ]
+        )
 
         return QualityValidation(
             request_id=request_id,

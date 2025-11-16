@@ -18,7 +18,6 @@ Exceptions:
 """
 
 # Import main public API components
-from .generator import AIImageGenerator
 from .exceptions import (
     AIGenerationError,
     APIError,
@@ -29,6 +28,7 @@ from .exceptions import (
     StorageError,
     ValidationError,
 )
+from .generator import AIImageGenerator
 from .models import (
     GenerationMetadata,
     ImageRequest,

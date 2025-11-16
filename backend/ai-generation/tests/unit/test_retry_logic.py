@@ -8,7 +8,6 @@ Tests cover:
 """
 
 from unittest.mock import Mock, patch
-from uuid import uuid4
 
 import pytest
 
@@ -33,7 +32,6 @@ class TestRetryLogic:
 
     def test_quality_failure_should_be_retryable(self) -> None:
         """Test that QualityError is classified as retryable."""
-        from src.exceptions import QualityError
 
         # QualityError should exist and be retryable
         error = QualityError("Image quality too low")
@@ -41,21 +39,18 @@ class TestRetryLogic:
 
     def test_rate_limit_error_should_be_retryable(self) -> None:
         """Test that RateLimitError is classified as retryable."""
-        from src.exceptions import RateLimitError
 
         error = RateLimitError("Rate limit exceeded")
         assert isinstance(error, Exception)
 
     def test_service_error_should_be_retryable(self) -> None:
         """Test that ServiceError is classified as retryable."""
-        from src.exceptions import ServiceError
 
         error = ServiceError("Service unavailable")
         assert isinstance(error, Exception)
 
     def test_storage_error_should_not_be_retryable(self) -> None:
         """Test that StorageError is classified as non-retryable."""
-        from src.exceptions import StorageError
 
         error = StorageError("Disk full")
         assert isinstance(error, Exception)
@@ -81,10 +76,10 @@ class TestRetryLogic:
 
         # Verify the pattern exists
         for i, delay in enumerate(expected_delays, 1):
-            calculated_delay = 2 ** i
+            calculated_delay = 2**i
             assert calculated_delay == delay
 
-    @patch('time.sleep')
+    @patch("time.sleep")
     def test_retry_respects_backoff_delays(self, mock_sleep: Mock) -> None:
         """Test that retries use proper backoff delays."""
         # This is a placeholder - actual implementation will use tenacity

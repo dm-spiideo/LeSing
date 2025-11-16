@@ -29,38 +29,28 @@ class TestAIImageGeneratorContract:
         test_settings.storage_path = temp_output_dir
         return AIImageGenerator(settings=test_settings)
 
-    def test_generate_image_accepts_prompt_string(
-        self, generator: AIImageGenerator
-    ) -> None:
+    def test_generate_image_accepts_prompt_string(self, generator: AIImageGenerator) -> None:
         """Test that generate_image accepts a string prompt."""
         # This will fail until implemented, but tests the contract
         result = generator.generate_image("SARAH")
         assert isinstance(result, ImageResult)
 
-    def test_generate_image_accepts_optional_style(
-        self, generator: AIImageGenerator
-    ) -> None:
+    def test_generate_image_accepts_optional_style(self, generator: AIImageGenerator) -> None:
         """Test that generate_image accepts optional style parameter."""
         result = generator.generate_image("SARAH", style="modern")
         assert isinstance(result, ImageResult)
 
-    def test_generate_image_accepts_optional_size(
-        self, generator: AIImageGenerator
-    ) -> None:
+    def test_generate_image_accepts_optional_size(self, generator: AIImageGenerator) -> None:
         """Test that generate_image accepts optional size parameter."""
         result = generator.generate_image("SARAH", size="1024x1024")
         assert isinstance(result, ImageResult)
 
-    def test_generate_image_accepts_optional_quality(
-        self, generator: AIImageGenerator
-    ) -> None:
+    def test_generate_image_accepts_optional_quality(self, generator: AIImageGenerator) -> None:
         """Test that generate_image accepts optional quality parameter."""
         result = generator.generate_image("SARAH", quality="standard")
         assert isinstance(result, ImageResult)
 
-    def test_generate_image_returns_image_result(
-        self, generator: AIImageGenerator
-    ) -> None:
+    def test_generate_image_returns_image_result(self, generator: AIImageGenerator) -> None:
         """Test that generate_image returns ImageResult."""
         result = generator.generate_image("SARAH")
         assert isinstance(result, ImageResult)
@@ -71,25 +61,19 @@ class TestAIImageGeneratorContract:
         assert hasattr(result, "metadata")
         assert hasattr(result, "timestamp")
 
-    def test_generate_image_result_has_valid_request_id(
-        self, generator: AIImageGenerator
-    ) -> None:
+    def test_generate_image_result_has_valid_request_id(self, generator: AIImageGenerator) -> None:
         """Test that ImageResult contains a valid UUID request_id."""
         result = generator.generate_image("SARAH")
         assert isinstance(result.request_id, UUID)
 
-    def test_generate_image_success_status_has_image_path(
-        self, generator: AIImageGenerator
-    ) -> None:
+    def test_generate_image_success_status_has_image_path(self, generator: AIImageGenerator) -> None:
         """Test that success status includes image_path."""
         result = generator.generate_image("SARAH")
         if result.status == "success":
             assert result.image_path is not None
             assert isinstance(result.image_path, Path)
 
-    def test_generate_image_success_status_has_metadata(
-        self, generator: AIImageGenerator
-    ) -> None:
+    def test_generate_image_success_status_has_metadata(self, generator: AIImageGenerator) -> None:
         """Test that success status includes metadata."""
         result = generator.generate_image("SARAH")
         if result.status == "success":
@@ -99,9 +83,7 @@ class TestAIImageGeneratorContract:
             assert hasattr(result.metadata, "generation_time_ms")
             assert hasattr(result.metadata, "quality_validation")
 
-    def test_generate_image_failed_status_has_error(
-        self, generator: AIImageGenerator
-    ) -> None:
+    def test_generate_image_failed_status_has_error(self, generator: AIImageGenerator) -> None:
         """Test that failed status includes error message."""
         # Force failure with invalid prompt
         result = generator.generate_image("")
@@ -110,9 +92,7 @@ class TestAIImageGeneratorContract:
             assert isinstance(result.error, str)
             assert len(result.error) > 0
 
-    def test_generate_image_raises_validation_error_for_invalid_prompt(
-        self, generator: AIImageGenerator
-    ) -> None:
+    def test_generate_image_raises_validation_error_for_invalid_prompt(self, generator: AIImageGenerator) -> None:
         """Test that invalid prompt raises ValidationError or returns failed status."""
         # Empty prompt should either raise ValidationError or return failed status
         try:
@@ -122,9 +102,7 @@ class TestAIImageGeneratorContract:
         except ValidationError:
             pass  # Also acceptable
 
-    def test_generate_image_raises_validation_error_for_invalid_style(
-        self, generator: AIImageGenerator
-    ) -> None:
+    def test_generate_image_raises_validation_error_for_invalid_style(self, generator: AIImageGenerator) -> None:
         """Test that invalid style raises ValidationError or returns failed status."""
         try:
             result = generator.generate_image("SARAH", style="invalid_style")  # type: ignore[arg-type]
@@ -170,9 +148,7 @@ class TestAIImageGeneratorContract:
 
     def test_exception_has_details(self) -> None:
         """Test that exceptions can have details dict."""
-        error = AIGenerationError(
-            "Test error", details={"key": "value", "code": 123}
-        )
+        error = AIGenerationError("Test error", details={"key": "value", "code": 123})
         assert hasattr(error, "details")
         assert error.details["key"] == "value"
         assert error.details["code"] == 123

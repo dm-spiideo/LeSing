@@ -57,18 +57,14 @@ class TestPromptValidator:
 
         assert "empty" in str(exc_info.value).lower()
 
-    def test_validate_prompt_whitespace_only_raises_error(
-        self, validator: PromptValidator
-    ) -> None:
+    def test_validate_prompt_whitespace_only_raises_error(self, validator: PromptValidator) -> None:
         """Test that whitespace-only prompt raises ValidationError."""
         with pytest.raises(ValidationError) as exc_info:
             validator.validate_prompt("   ")
 
         assert "empty" in str(exc_info.value).lower()
 
-    def test_validate_prompt_too_long_raises_error(
-        self, validator: PromptValidator
-    ) -> None:
+    def test_validate_prompt_too_long_raises_error(self, validator: PromptValidator) -> None:
         """Test that prompt exceeding 50 characters raises ValidationError."""
         too_long_prompt = "A" * 51
         with pytest.raises(ValidationError) as exc_info:
@@ -76,17 +72,13 @@ class TestPromptValidator:
 
         assert "50" in str(exc_info.value) or "long" in str(exc_info.value).lower()
 
-    def test_validate_prompt_non_latin_characters_raises_error(
-        self, validator: PromptValidator
-    ) -> None:
+    def test_validate_prompt_non_latin_characters_raises_error(self, validator: PromptValidator) -> None:
         """Test that non-Latin characters raise ValidationError."""
         # Cyrillic characters
         with pytest.raises(ValidationError) as exc_info:
             validator.validate_prompt("Привет")
 
-        assert "latin" in str(exc_info.value).lower() or "character" in str(
-            exc_info.value
-        ).lower()
+        assert "latin" in str(exc_info.value).lower() or "character" in str(exc_info.value).lower()
 
         # Chinese characters
         with pytest.raises(ValidationError):
@@ -101,9 +93,7 @@ class TestPromptValidator:
         result = validator.validate_prompt("  SARAH  ")
         assert result == "SARAH"
 
-    def test_validate_prompt_preserves_internal_spaces(
-        self, validator: PromptValidator
-    ) -> None:
+    def test_validate_prompt_preserves_internal_spaces(self, validator: PromptValidator) -> None:
         """Test that validator preserves internal spaces."""
         result = validator.validate_prompt("Welcome  Home")
         assert "  " in result  # Double space preserved

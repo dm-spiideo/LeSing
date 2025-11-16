@@ -44,6 +44,7 @@ class ValidationError(AIGenerationError):
 
     This is a non-retryable error - the client must fix their input.
     """
+
     pass
 
 
@@ -53,6 +54,7 @@ class APIError(AIGenerationError):
     This exception and its subclasses represent errors that occur during
     communication with the OpenAI API.
     """
+
     pass
 
 
@@ -66,6 +68,7 @@ class AuthenticationError(APIError):
 
     This is a non-retryable error - the API key must be corrected.
     """
+
     pass
 
 
@@ -77,6 +80,7 @@ class RateLimitError(APIError):
     This is a retryable error - the request should be retried after
     a backoff period (typically 60 seconds for OpenAI).
     """
+
     pass
 
 
@@ -89,6 +93,7 @@ class ServiceError(APIError):
     This is a retryable error - the request may succeed if retried
     after a short delay.
     """
+
     pass
 
 
@@ -105,6 +110,7 @@ class QualityError(AIGenerationError):
     This is a retryable error - regeneration with a modified prompt
     may produce better results.
     """
+
     pass
 
 
@@ -120,4 +126,5 @@ class StorageError(AIGenerationError):
 
     This is a non-retryable error - the storage configuration must be fixed.
     """
+
     pass

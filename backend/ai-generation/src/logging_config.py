@@ -8,15 +8,12 @@ This module sets up structured logging using structlog with:
 
 import logging
 import sys
-from typing import Any
 
 import structlog
 from structlog.types import EventDict, Processor
 
 
-def filter_sensitive_data(
-    logger: logging.Logger, method_name: str, event_dict: EventDict
-) -> EventDict:
+def filter_sensitive_data(logger: logging.Logger, method_name: str, event_dict: EventDict) -> EventDict:
     """Filter sensitive data from log events.
 
     This processor masks sensitive information like API keys before logging.

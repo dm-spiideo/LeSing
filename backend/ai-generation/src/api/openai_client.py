@@ -4,17 +4,17 @@ This module provides a wrapper around the OpenAI API for generating images
 with proper error handling and retry logic.
 """
 
-import time
 from typing import Any
 
 import httpx
-from openai import OpenAI
 from openai import AuthenticationError as OpenAIAuthError
+from openai import OpenAI
 from openai import RateLimitError as OpenAIRateLimitError
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-from ..exceptions import AuthenticationError, RateLimitError, ServiceError
 from config.settings import Settings
+
+from ..exceptions import AuthenticationError, RateLimitError, ServiceError
 
 
 class OpenAIClient:
@@ -41,9 +41,7 @@ class OpenAIClient:
         wait=wait_exponential(multiplier=2, min=2, max=16),
         retry_error_callback=lambda retry_state: None,
     )
-    def generate_image_from_prompt(
-        self, prompt: str, size: str, quality: str
-    ) -> dict[str, Any]:
+    def generate_image_from_prompt(self, prompt: str, size: str, quality: str) -> dict[str, Any]:
         """Generate image from prompt using DALL-E 3.
 
         Args:
@@ -63,8 +61,8 @@ class OpenAIClient:
             response = self.client.images.generate(
                 model="dall-e-3",
                 prompt=prompt,
-                size=size,  # type: ignore[arg-type]
-                quality=quality,  # type: ignore[arg-type]
+                size=size,
+                quality=quality,
                 n=1,
             )
 

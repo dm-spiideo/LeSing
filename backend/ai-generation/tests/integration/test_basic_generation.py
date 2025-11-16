@@ -23,9 +23,7 @@ class TestBasicGeneration:
         return AIImageGenerator(settings=test_settings)
 
     @respx.mock
-    def test_generate_image_end_to_end(
-        self, generator: AIImageGenerator, respx_mock: MockRouter
-    ) -> None:
+    def test_generate_image_end_to_end(self, generator: AIImageGenerator, respx_mock: MockRouter) -> None:
         """Test complete generation flow from prompt to saved image."""
         # Mock OpenAI API response
         mock_api_response = {
@@ -39,8 +37,9 @@ class TestBasicGeneration:
         }
 
         # Mock image download (return a small valid PNG)
-        from PIL import Image
         import io
+
+        from PIL import Image
 
         test_image = Image.new("RGB", (1024, 1024), color="white")
         img_bytes = io.BytesIO()
@@ -67,12 +66,11 @@ class TestBasicGeneration:
         assert result.metadata.quality_validation.validation_passed is True
 
     @respx.mock
-    def test_generate_image_with_custom_size(
-        self, generator: AIImageGenerator, respx_mock: MockRouter
-    ) -> None:
+    def test_generate_image_with_custom_size(self, generator: AIImageGenerator, respx_mock: MockRouter) -> None:
         """Test generation with custom image size."""
-        from PIL import Image
         import io
+
+        from PIL import Image
 
         mock_api_response = {
             "created": 1699000000,
@@ -102,14 +100,10 @@ class TestBasicGeneration:
         assert result.metadata.image_size == "1792x1024"  # type: ignore[union-attr]
 
     @respx.mock
-    def test_generate_image_api_failure(
-        self, generator: AIImageGenerator, respx_mock: MockRouter
-    ) -> None:
+    def test_generate_image_api_failure(self, generator: AIImageGenerator, respx_mock: MockRouter) -> None:
         """Test generation handles API failures gracefully."""
         respx_mock.post("https://api.openai.com/v1/images/generations").mock(
-            return_value=httpx.Response(
-                503, json={"error": {"message": "Service unavailable"}}
-            )
+            return_value=httpx.Response(503, json={"error": {"message": "Service unavailable"}})
         )
 
         result = generator.generate_image("SARAH")
@@ -119,9 +113,7 @@ class TestBasicGeneration:
         assert "service" in result.error.lower() or "503" in result.error
 
     @respx.mock
-    def test_generate_image_invalid_prompt(
-        self, generator: AIImageGenerator, respx_mock: MockRouter
-    ) -> None:
+    def test_generate_image_invalid_prompt(self, generator: AIImageGenerator, respx_mock: MockRouter) -> None:
         """Test generation with invalid prompt fails gracefully."""
         # Too long prompt
         too_long_prompt = "A" * 51
@@ -137,9 +129,10 @@ class TestBasicGeneration:
         self, generator: AIImageGenerator, respx_mock: MockRouter, temp_output_dir: Path
     ) -> None:
         """Test that metadata JSON file is saved alongside image."""
-        from PIL import Image
         import io
         import json
+
+        from PIL import Image
 
         mock_api_response = {
             "created": 1699000000,

@@ -12,8 +12,9 @@ from uuid import UUID
 
 from PIL import Image
 
-from ..exceptions import StorageError
 from config.settings import Settings
+
+from ..exceptions import StorageError
 
 
 class StorageManager:
@@ -114,9 +115,7 @@ class StorageManager:
                 },
             ) from e
 
-    def save_metadata_json(
-        self, metadata: dict[str, Any], image_path: Path
-    ) -> Path:
+    def save_metadata_json(self, metadata: dict[str, Any], image_path: Path) -> Path:
         """Save metadata JSON file alongside image.
 
         Args:

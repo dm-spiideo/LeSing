@@ -10,6 +10,8 @@ from pathlib import Path
 import httpx
 from PIL import Image
 
+from config.settings import Settings
+
 from .api.openai_client import OpenAIClient
 from .exceptions import ValidationError
 from .logging_config import configure_logging, get_logger
@@ -18,7 +20,6 @@ from .prompt.optimizer import PromptOptimizer
 from .storage.manager import StorageManager
 from .validation.quality_validator import QualityValidator
 from .validation.validator import PromptValidator
-from config.settings import Settings
 
 
 class AIImageGenerator:
@@ -105,9 +106,9 @@ class AIImageGenerator:
             # Create image request
             request = ImageRequest(
                 prompt=validated_prompt,
-                style=style,  # type: ignore[arg-type]
-                size=size or self.settings.image_size,  # type: ignore[arg-type]
-                quality=quality or self.settings.image_quality,  # type: ignore[arg-type]
+                style=style,
+                size=size or self.settings.image_size,
+                quality=quality or self.settings.image_quality,
             )
 
             # Try generation with retry logic for quality failures
@@ -137,6 +138,7 @@ class AIImageGenerator:
                             error=str(e),
                         )
                         from uuid import uuid4
+
                         return ImageResult(
                             request_id=request.request_id,
                             status="failed",
@@ -145,7 +147,7 @@ class AIImageGenerator:
 
                     # Not the last attempt - check if retryable
                     if self._is_retryable_error(e):
-                        backoff_seconds = 2 ** attempt  # Exponential backoff: 2, 4, 8
+                        backoff_seconds = 2**attempt  # Exponential backoff: 2, 4, 8
                         self.logger.warning(
                             "retry_attempt",
                             request_id=str(request.request_id),
@@ -158,6 +160,7 @@ class AIImageGenerator:
 
                         # Wait before retry
                         import time
+
                         time.sleep(backoff_seconds)
                         continue
                     else:
@@ -170,6 +173,16 @@ class AIImageGenerator:
                         )
                         raise
 
+            # This line should never be reached (loop always returns or raises)
+            # but is required to satisfy mypy's return checking
+            from uuid import uuid4
+
+            return ImageResult(
+                request_id=request.request_id,
+                status="failed",
+                error="Unexpected: retry loop completed without returning",
+            )
+
         except ValidationError as e:
             # Validation errors should return failed status
             self.logger.error(
@@ -178,8 +191,9 @@ class AIImageGenerator:
                 details=e.details,
             )
             from uuid import uuid4
+
             return ImageResult(
-                request_id=request.request_id if 'request' in locals() else uuid4(),
+                request_id=request.request_id if "request" in locals() else uuid4(),
                 status="failed",
                 error=e.message,
             )
@@ -193,8 +207,9 @@ class AIImageGenerator:
                 error_type=type(e).__name__,
             )
             from uuid import uuid4
+
             return ImageResult(
-                request_id=request.request_id if 'request' in locals() else uuid4(),
+                request_id=request.request_id if "request" in locals() else uuid4(),
                 status="failed",
                 error=error_message,
             )
@@ -323,6 +338,7 @@ class AIImageGenerator:
         # Check if quality validation passed
         if not quality_validation.validation_passed:
             from .exceptions import QualityError
+
             raise QualityError(
                 f"Generated image failed quality validation (score: {quality_validation.quality_score})",
                 details={
@@ -379,6 +395,7 @@ class AIImageGenerator:
         """
         # Generate a temporary request ID for validation
         from uuid import uuid4
+
         request_id = uuid4()
 
         return self.quality_validator.validate_image(

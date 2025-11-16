@@ -23,12 +23,11 @@ class TestStyledGeneration:
         return AIImageGenerator(settings=test_settings)
 
     @respx.mock
-    def test_generate_with_modern_style(
-        self, generator: AIImageGenerator, respx_mock: MockRouter
-    ) -> None:
+    def test_generate_with_modern_style(self, generator: AIImageGenerator, respx_mock: MockRouter) -> None:
         """Test generation with modern style."""
-        from PIL import Image
         import io
+
+        from PIL import Image
 
         mock_api_response = {
             "created": 1699000000,
@@ -58,16 +57,17 @@ class TestStyledGeneration:
         assert result.metadata is not None
         assert result.metadata.original_prompt == "SARAH"
         # Optimized prompt should contain modern-related keywords
-        assert "modern" in result.metadata.optimized_prompt.lower() or \
-               "minimalist" in result.metadata.optimized_prompt.lower()
+        assert (
+            "modern" in result.metadata.optimized_prompt.lower()
+            or "minimalist" in result.metadata.optimized_prompt.lower()
+        )
 
     @respx.mock
-    def test_generate_with_classic_style(
-        self, generator: AIImageGenerator, respx_mock: MockRouter
-    ) -> None:
+    def test_generate_with_classic_style(self, generator: AIImageGenerator, respx_mock: MockRouter) -> None:
         """Test generation with classic style."""
-        from PIL import Image
         import io
+
+        from PIL import Image
 
         mock_api_response = {
             "created": 1699000000,
@@ -96,16 +96,17 @@ class TestStyledGeneration:
         assert result.status == "success"
         assert result.metadata is not None
         # Optimized prompt should contain classic-related keywords
-        assert "classic" in result.metadata.optimized_prompt.lower() or \
-               "elegant" in result.metadata.optimized_prompt.lower()
+        assert (
+            "classic" in result.metadata.optimized_prompt.lower()
+            or "elegant" in result.metadata.optimized_prompt.lower()
+        )
 
     @respx.mock
-    def test_generate_with_playful_style(
-        self, generator: AIImageGenerator, respx_mock: MockRouter
-    ) -> None:
+    def test_generate_with_playful_style(self, generator: AIImageGenerator, respx_mock: MockRouter) -> None:
         """Test generation with playful style."""
-        from PIL import Image
         import io
+
+        from PIL import Image
 
         mock_api_response = {
             "created": 1699000000,
@@ -134,16 +135,16 @@ class TestStyledGeneration:
         assert result.status == "success"
         assert result.metadata is not None
         # Optimized prompt should contain playful-related keywords
-        assert "playful" in result.metadata.optimized_prompt.lower() or \
-               "fun" in result.metadata.optimized_prompt.lower()
+        assert (
+            "playful" in result.metadata.optimized_prompt.lower() or "fun" in result.metadata.optimized_prompt.lower()
+        )
 
     @respx.mock
-    def test_generate_without_style(
-        self, generator: AIImageGenerator, respx_mock: MockRouter
-    ) -> None:
+    def test_generate_without_style(self, generator: AIImageGenerator, respx_mock: MockRouter) -> None:
         """Test generation without style (None)."""
-        from PIL import Image
         import io
+
+        from PIL import Image
 
         mock_api_response = {
             "created": 1699000000,
