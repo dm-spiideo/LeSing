@@ -1,0 +1,23 @@
+# Development and Testing Dependencies
+# Install with: pip install -r requirements-dev.txt
+
+# Include production dependencies
+-r requirements.txt
+
+# Testing framework
+pytest==8.3.3
+pytest-cov==5.0.0
+pytest-mock==3.14.0
+
+# HTTP mocking for API tests
+respx==0.21.1
+
+# VCR for recording/replaying HTTP interactions
+vcrpy==6.0.1
+
+# Code quality tools
+ruff==0.7.0
+mypy==1.13.0
+
+# Type stubs for better type checking
+types-pillow
