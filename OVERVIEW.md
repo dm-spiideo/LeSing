@@ -71,18 +71,30 @@ LeSign is a fully automated name sign manufacturing platform that transforms tex
 
 ### 5. 3D Model Pipeline
 
-**Purpose**: Converts 2D designs into printable 3D models.
+**Purpose**: Converts AI-generated 2D images into printable 3D models and G-code.
+
+**Status**: 🚧 In Development (Feature 002)
 
 **Core Responsibilities**:
-- Image to 2D vector conversion
-- 2D-to-3D model conversion
-- Model optimization and validation
-- G-code generation and slicing
+- Image to SVG vector conversion using VTracer
+- SVG to 3D extrusion using Build123d CAD library
+- Mesh validation and repair (watertight, manifold)
+- Quality metrics validation (SSIM ≥0.85, Edge IoU ≥0.75)
+- G-code generation with PrusaSlicer CLI
+- Bambu Lab H2D printer profile support
+
+**Technologies**:
+- Python 3.12, VTracer, Build123d, trimesh, Manifold3D, PrusaSlicer CLI, scikit-image, opencv-python
 
 **Subcomponents**:
-- Model Converter
-- Slicer Engine
-- Printability Validator
+- **model-converter**: Image→Vector→3D conversion with quality validation
+- **slicer**: 3D→G-code generation with printer profiles
+- **shared**: Common utilities, models, and error handling
+
+**File Outputs**:
+- SVG files (≤8 colors, <5MB, <1000 paths)
+- 3MF files (watertight, manifold, ≤256mm build volume)
+- G-code files (Bambu Lab H2D compatible)
 
 ---
 
@@ -226,27 +238,32 @@ Each bracketed component is a standalone module with its own:
 
 ```
 lesign/
-├── frontend/              # Front-end web server and UI
-│   ├── web-ui/           # React/Vue design browser and creator
-│   ├── api-server/       # Backend API for orders and users
-│   └── payment/          # Payment integration module
-├── backend/               # Backend processing pipeline
-│   ├── ai-generation/    # Diffusion model integration
-│   ├── design-library/   # Design storage and management
-│   ├── model-converter/  # 2D to 3D conversion service
-│   ├── slicer/           # G-code generation service
-│   └── queue-manager/    # Print job orchestration
-├── printer-agent/         # Local 3D printer integration
-│   ├── printer-control/  # Printer communication
-│   ├── monitoring/       # Status reporting and cameras
-│   └── local-queue/      # Job buffering
-├── shared/                # Shared libraries and utilities
-│   ├── models/           # Data models and schemas
-│   └── protocols/        # Communication protocols
-├── infrastructure/        # IaC and deployment configs
-│   ├── terraform/        # Cloud infrastructure
-│   └── kubernetes/       # Container orchestration
-└── docs/                  # Documentation and specifications
+├── backend/                  # Backend processing pipeline
+│   ├── ai-generation/       # DALL-E 3 image generation (Feature 001) ✅
+│   │   ├── src/            # Source code
+│   │   ├── tests/          # Test suite (95 tests, 91% coverage)
+│   │   ├── requirements.txt
+│   │   └── pyproject.toml
+│   ├── model-converter/     # Image→Vector→3D conversion (Feature 002) 🚧
+│   │   ├── src/            # Converter, vectorizer, validator, repairer
+│   │   ├── tests/          # Contract, integration, unit tests
+│   │   ├── requirements.txt
+│   │   └── pyproject.toml
+│   ├── slicer/             # 3D→G-code generation (Feature 002) 🚧
+│   │   ├── src/            # PrusaSlicer CLI wrapper
+│   │   ├── tests/          # Slicing tests
+│   │   ├── requirements.txt
+│   │   └── pyproject.toml
+│   └── shared/             # Shared utilities (Feature 002) 🚧
+│       ├── models.py       # Pydantic models
+│       ├── exceptions.py   # Error hierarchy
+│       └── logging_config.py
+├── specs/                   # Feature specifications
+│   ├── 001-ai-image-generation/
+│   └── 002-3d-model-pipeline/
+├── investigations/          # Research artifacts
+├── .github/workflows/       # CI/CD pipelines
+└── .specify/               # Project constitution and templates
 ```
 
 ## Next Steps

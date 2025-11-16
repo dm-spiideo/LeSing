@@ -34,7 +34,25 @@ wheels/
 *.egg
 .pytest_cache/
 .coverage
+.coverage.*
+coverage.xml
 htmlcov/
+
+# 3D Model Pipeline artifacts
+backend/model-converter/tests/fixtures/synthetic/*.png
+backend/model-converter/tests/fixtures/synthetic/*.svg
+backend/model-converter/tests/fixtures/synthetic/*.3mf
+backend/slicer/tests/fixtures/*.gcode
+*.stl
+*.3mf
+*.gcode
+*.svg
+
+# VTracer output
+*.trace
+
+# PrusaSlicer
+*.ini.bak
 
 # Node.js
 node_modules/
