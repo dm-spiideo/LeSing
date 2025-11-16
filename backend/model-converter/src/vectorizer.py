@@ -341,3 +341,94 @@ def _count_colors(root: ET.Element) -> int:
 
     # Return color count, capped at MAX_COLORS
     return min(len(colors) if colors else 1, MAX_COLORS)
+
+
+# =============================================================================
+# Quality-Aware Vectorization with Retry
+# =============================================================================
+
+
+class RetryResult:
+    """
+    Result from vectorize_with_retry operation.
+
+    Tracks retry attempts and quality improvements.
+    """
+
+    def __init__(
+        self,
+        vector_file: VectorFile,
+        initial_quality: float,
+        final_quality: float,
+        retry_count: int,
+        parameter_history: list[dict],
+    ):
+        self.vector_file = vector_file
+        self.initial_quality = initial_quality
+        self.final_quality = final_quality
+        self.retry_count = retry_count
+        self.parameter_history = parameter_history
+
+
+def vectorize_with_retry(
+    image_path: Path,
+    output_path: Path,
+    max_colors: int = 8,
+    max_retries: int = 3,
+    timeout_seconds: int = 120,
+) -> RetryResult:
+    """
+    Vectorize image with automatic quality-based retry (FR-007).
+
+    Wraps the quality workflow to provide retry functionality with:
+    - Automatic quality validation
+    - Exponential backoff between retries
+    - Parameter adjustment strategies
+    - Comprehensive result tracking
+
+    Args:
+        image_path: Path to input raster image
+        output_path: Path for output SVG file
+        max_colors: Maximum colors for initial attempt (default 8)
+        max_retries: Maximum retry attempts (default 3)
+        timeout_seconds: Timeout per attempt (default 120s)
+
+    Returns:
+        RetryResult with vectorization outcome and retry statistics
+
+    Raises:
+        VectorizationError: If vectorization fails after all retries
+        TimeoutError: If processing exceeds timeout
+    """
+    from .quality_workflow import vectorize_with_quality_check
+
+    # Track attempts
+    parameter_history = []
+    initial_quality_score = None
+
+    # Use quality workflow with retry enabled
+    try:
+        workflow_result = vectorize_with_quality_check(
+            image_path=image_path,
+            output_path=output_path,
+            max_colors=max_colors,
+            timeout_seconds=timeout_seconds,
+            enable_retry=(max_retries > 0),
+        )
+
+        # Extract results from workflow
+        return RetryResult(
+            vector_file=workflow_result.vector_file,
+            initial_quality=workflow_result.initial_quality,
+            final_quality=workflow_result.final_quality,
+            retry_count=workflow_result.retry_count,
+            parameter_history=workflow_result.parameter_history,
+        )
+
+    except Exception as e:
+        logger.error(
+            "vectorize_with_retry_failed",
+            error=str(e),
+            error_type=type(e).__name__,
+        )
+        raise
