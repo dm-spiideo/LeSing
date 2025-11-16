@@ -1,0 +1,6 @@
+# Slicer Component - Production Dependencies
+# Data validation
+pydantic>=2.0.0
+
+# Note: PrusaSlicer CLI must be installed separately on the system
+# Installation instructions: https://github.com/prusa3d/PrusaSlicer
