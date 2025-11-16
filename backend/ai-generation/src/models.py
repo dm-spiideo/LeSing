@@ -87,6 +87,7 @@ class QualityValidation(BaseModel):
     width: int
     height: int
     file_size_bytes: int
+    image_format: str = ""
     quality_score: float = Field(ge=0.0, le=1.0)
     validation_passed: bool
     timestamp: datetime = Field(default_factory=datetime.utcnow)

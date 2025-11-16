@@ -18,9 +18,7 @@ Exceptions:
 """
 
 # Import main public API components
-# Note: generator.py will be created in Phase 3 (User Story 1)
-# For now, we expose the models and exceptions
-
+from .generator import AIImageGenerator
 from .exceptions import (
     AIGenerationError,
     APIError,
@@ -39,8 +37,8 @@ from .models import (
 )
 
 __all__ = [
-    # Main API (will be added when generator.py is created)
-    # "AIImageGenerator",
+    # Main API
+    "AIImageGenerator",
     # Models
     "ImageRequest",
     "ImageResult",
