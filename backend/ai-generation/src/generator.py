@@ -14,6 +14,7 @@ from .api.openai_client import OpenAIClient
 from .exceptions import ValidationError
 from .logging_config import configure_logging, get_logger
 from .models import GenerationMetadata, ImageRequest, ImageResult, QualityValidation
+from .prompt.optimizer import PromptOptimizer
 from .storage.manager import StorageManager
 from .validation.quality_validator import QualityValidator
 from .validation.validator import PromptValidator
@@ -58,6 +59,7 @@ class AIImageGenerator:
         )
         self.storage_manager = StorageManager(settings=settings)
         self.prompt_validator = PromptValidator()
+        self.prompt_optimizer = PromptOptimizer()
         self.quality_validator = QualityValidator()
 
         self.logger.info(
@@ -97,10 +99,21 @@ class AIImageGenerator:
                 quality=quality or self.settings.image_quality,  # type: ignore[arg-type]
             )
 
+            # Optimize prompt with style keywords if style is provided
+            if style:
+                optimized_prompt = self.prompt_optimizer.optimize(
+                    validated_prompt,
+                    style=style,  # type: ignore[arg-type]
+                )
+            else:
+                optimized_prompt = validated_prompt
+
             self.logger.info(
                 "generation_started",
                 request_id=str(request.request_id),
                 prompt=validated_prompt,
+                optimized_prompt=optimized_prompt,
+                style=style,
                 size=request.size,
                 quality=request.quality,
             )
@@ -108,9 +121,9 @@ class AIImageGenerator:
             # Track generation time
             start_time = time.time()
 
-            # Generate image via OpenAI
+            # Generate image via OpenAI using optimized prompt
             api_response = self.openai_client.generate_image_from_prompt(
-                prompt=validated_prompt,
+                prompt=optimized_prompt,
                 size=request.size,
                 quality=request.quality,
             )
@@ -144,7 +157,7 @@ class AIImageGenerator:
             metadata = GenerationMetadata(
                 model="dall-e-3",
                 original_prompt=validated_prompt,
-                optimized_prompt=api_response["revised_prompt"],
+                optimized_prompt=optimized_prompt,  # Our prompt with style keywords
                 generation_time_ms=generation_time_ms,
                 image_size=request.size,
                 image_format=quality_validation.image_format,
