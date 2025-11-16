@@ -1,0 +1,107 @@
+[project]
+name = "model-converter"
+version = "0.1.0"
+description = "3D model pipeline for converting 2D images to printable 3D models with quality validation"
+requires-python = ">=3.12"
+dependencies = [
+    "vtracer>=0.6.0",
+    "build123d>=0.5.0",
+    "trimesh>=4.0.0",
+    "manifold3d>=2.0.0",
+    "scikit-image>=0.22.0",
+    "opencv-python>=4.8.0",
+    "scipy>=1.11.0",
+    "numpy>=1.24.0",
+    "Pillow>=10.0.0",
+    "pydantic>=2.0.0",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "SIM", # flake8-simplify
+    "I",   # isort
+    "N",   # pep8-naming
+    "S",   # flake8-bandit (security)
+    "C90", # mccabe complexity
+]
+ignore = [
+    "SIM108",  # Use ternary operator - sometimes if/else is clearer
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    "S101",  # Allow assert in tests
+    "S108",  # Allow hardcoded temp file paths in tests
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--tb=short",
+    "--cov=src",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-fail-under=90",  # 90% coverage requirement per spec
+]
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "contract: Contract tests",
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "tests/*",
+    "**/__init__.py",
+]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_any_unimported = false
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = false
+warn_no_return = true
+check_untyped_defs = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+[[tool.mypy.overrides]]
+module = [
+    "vtracer.*",
+    "build123d.*",
+    "trimesh.*",
+    "manifold3d.*",
+    "cv2.*",
+    "skimage.*",
+    "scipy.*",
+    "PIL.*",
+]
+ignore_missing_imports = true
