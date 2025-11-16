@@ -1,7 +1,6 @@
 # Project-specific
 investigations/
 .claude/
-.specify/
 
 # macOS
 .DS_Store
