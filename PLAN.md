@@ -16,7 +16,7 @@ High-level implementation tracking for LeSign's core components. Detailed specif
 | **Processing** | AI Image Generation | - | ✅ Completed | P1 | None | `backend/ai-generation/` |
 | **Processing** | 3D Model Pipeline | Model Converter, Slicer, Shared | 🚧 In Development | P1 | AI Image Generation | `backend/model-converter/`, `backend/slicer/`, `backend/shared/` |
 | **Processing** | Job Orchestration | Queue Manager, Workflow Engine, Status Tracker | 📋 Planned | P2 | 3D Model Pipeline, Payment | `backend/queue-manager/` |
-| **Hardware** | Printer Control | Printer Agent, Hardware Interface, Local Queue | 📋 Planned | P2 | Job Orchestration | `printer-agent/printer-control/` |
+| **Hardware** | Printer Control | Printer Agent, Hardware Interface, Local Queue | 🚧 In Development | P2 | 3D Model Pipeline | `backend/printer-control/` |
 | **User** | Web Interface | Design Browser, Prompt Interface, Order Dashboard | 📋 Planned | P3 | None | `frontend/web-ui/` |
 | **User** | Payment Processing | - | 📋 Planned | P3 | Web Interface | `frontend/payment/` |
 | **Processing** | Design Library | - | 📋 Planned | P3 | None | `backend/design-library/` |
@@ -28,7 +28,7 @@ High-level implementation tracking for LeSign's core components. Detailed specif
 
 | Milestone | Description | Status | Components | Completion |
 |-----------|-------------|--------|------------|------------|
-| **POC: End-to-End Pipeline** | Proof of concept demonstrating complete pipeline from text prompt to physical print. Local execution with core functionality validated. | 🚧 In Progress (60%) | AI Image Generation (✅), 3D Model Pipeline (🚧), Printer Control (📋) | AI Generation complete, 3D pipeline in development |
+| **POC: End-to-End Pipeline** | Proof of concept demonstrating complete pipeline from text prompt to physical print. Local execution with core functionality validated. | 🚧 In Progress (80%) | AI Image Generation (✅), 3D Model Pipeline (✅), Printer Control (🚧) | AI Generation complete, 3D pipeline complete, Printer Control MVP in development |
 
 ---
 
@@ -63,6 +63,31 @@ High-level implementation tracking for LeSign's core components. Detailed specif
 **Pending**:
 - End-to-end integration testing
 - Performance optimization
+- Production deployment
+
+### 003: Printer Control (In Development 🚧)
+
+**Status**: MVP implementation complete, testing in progress
+**Location**: `backend/printer-control/`
+**Technologies**: Python 3.12, bambulabs-api, paho-mqtt, tenacity, structlog
+**Target Coverage**: >90%
+**Documentation**: See `specs/003-printer-control/`
+
+**Completed**:
+- Spec and documentation
+- Core architecture (agent, printer, queue)
+- MQTT/FTP printer interface
+- Local job queue with persistence
+- Automatic retry logic
+- Unit tests
+
+**In Progress**:
+- Integration testing with H2D printer
+- bambulabs_api H2D compatibility verification
+
+**Pending**:
+- Multi-printer support (Phase 4)
+- Camera integration
 - Production deployment
 
 ---

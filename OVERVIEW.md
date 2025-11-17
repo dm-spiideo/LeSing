@@ -118,15 +118,21 @@ LeSign is a fully automated name sign manufacturing platform that transforms tex
 
 **Purpose**: Direct communication and control of 3D printer hardware.
 
+**Status**: 🚧 In Development (Feature 003)
+
 **Core Responsibilities**:
-- G-code execution on printer hardware
-- Print job initiation and control
-- Local job buffering
+- G-code execution on printer hardware via FTP upload
+- Print job initiation and control via MQTT
+- Local job buffering with persistent queue
+- Real-time status monitoring
+
+**Technologies**:
+- Python 3.12, bambulabs-api, paho-mqtt, tenacity, structlog
 
 **Subcomponents**:
-- Printer Agent
-- Hardware Interface
-- Local Queue
+- Printer Agent: Job orchestration and queue management
+- Printer Interface: MQTT/FTP communication with Bambu Lab H2D
+- Local Queue: Persistent job queue with retry logic
 
 ---
 
@@ -244,23 +250,30 @@ lesign/
 │   │   ├── tests/          # Test suite (95 tests, 91% coverage)
 │   │   ├── requirements.txt
 │   │   └── pyproject.toml
-│   ├── model-converter/     # Image→Vector→3D conversion (Feature 002) 🚧
+│   ├── model-converter/     # Image→Vector→3D conversion (Feature 002) ✅
 │   │   ├── src/            # Converter, vectorizer, validator, repairer
 │   │   ├── tests/          # Contract, integration, unit tests
 │   │   ├── requirements.txt
 │   │   └── pyproject.toml
-│   ├── slicer/             # 3D→G-code generation (Feature 002) 🚧
+│   ├── slicer/             # 3D→G-code generation (Feature 002) ✅
 │   │   ├── src/            # PrusaSlicer CLI wrapper
 │   │   ├── tests/          # Slicing tests
 │   │   ├── requirements.txt
 │   │   └── pyproject.toml
-│   └── shared/             # Shared utilities (Feature 002) 🚧
-│       ├── models.py       # Pydantic models
-│       ├── exceptions.py   # Error hierarchy
-│       └── logging_config.py
+│   ├── shared/             # Shared utilities (Feature 002) ✅
+│   │   ├── models.py       # Pydantic models
+│   │   ├── exceptions.py   # Error hierarchy
+│   │   └── logging_config.py
+│   └── printer-control/    # Bambu Lab printer control (Feature 003) 🚧
+│       ├── src/printer_control/  # Agent, printer, queue, models
+│       ├── tests/          # Unit, integration, contract tests
+│       ├── config/         # Printer profiles
+│       ├── requirements.txt
+│       └── pyproject.toml
 ├── specs/                   # Feature specifications
 │   ├── 001-ai-image-generation/
-│   └── 002-3d-model-pipeline/
+│   ├── 002-3d-model-pipeline/
+│   └── 003-printer-control/
 ├── investigations/          # Research artifacts
 ├── .github/workflows/       # CI/CD pipelines
 └── .specify/               # Project constitution and templates
