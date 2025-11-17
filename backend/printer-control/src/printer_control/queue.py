@@ -3,7 +3,6 @@
 import json
 import threading
 from pathlib import Path
-from typing import Dict
 
 import structlog
 
@@ -37,7 +36,7 @@ class PrintQueue:
             QueueError: If unable to load existing queue state
         """
         self.queue_path = queue_path
-        self._jobs: Dict[str, PrintJob] = {}
+        self._jobs: dict[str, PrintJob] = {}
         self._state = QueueState()
         self._lock = threading.RLock()
 
@@ -270,7 +269,7 @@ class PrintQueue:
 
             except (OSError, json.JSONDecodeError) as e:
                 raise QueueError(
-                    f"Failed to save queue state",
+                    "Failed to save queue state",
                     details={"path": str(self.queue_path), "error": str(e)},
                 ) from e
 
@@ -283,7 +282,7 @@ class PrintQueue:
             QueueError: If unable to read or parse file
         """
         try:
-            with open(self.queue_path, "r") as f:
+            with open(self.queue_path) as f:
                 data = json.load(f)
 
             # Restore state
@@ -306,7 +305,7 @@ class PrintQueue:
 
         except (OSError, json.JSONDecodeError, KeyError, ValueError) as e:
             raise QueueError(
-                f"Failed to load queue state",
+                "Failed to load queue state",
                 details={"path": str(self.queue_path), "error": str(e)},
             ) from e
 

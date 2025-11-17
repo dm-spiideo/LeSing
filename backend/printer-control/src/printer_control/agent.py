@@ -3,17 +3,16 @@
 import threading
 import time
 import uuid
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Dict
+from typing import Any
 
 import structlog
-from tenacity import RetryError
 
 from printer_control.exceptions import (
     ConnectionError,
     PrinterControlError,
     QueueError,
-    ValidationError,
 )
 from printer_control.models import (
     PrinterConfig,
@@ -79,7 +78,7 @@ class PrinterAgent:
         gcode_path: Path,
         name: str | None = None,
         priority: int = 0,
-        metadata: Dict[str, any] | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> PrintJob:
         """Submit new print job to queue.
 
@@ -362,7 +361,7 @@ class PrinterAgent:
 
         # Step 3: Update to printing status
         job.status = PrintJobStatus.PRINTING
-        job.started_at = time.time()
+        job.started_at = datetime.now(UTC)
         self.queue.update_job(job)
         self.queue.save()
 
@@ -403,10 +402,11 @@ class PrinterAgent:
             job: Completed PrintJob
         """
         job.status = PrintJobStatus.COMPLETED
-        job.completed_at = time.time()
+        job.completed_at = datetime.now(UTC)
 
         if job.started_at:
-            job.actual_duration_seconds = int(job.completed_at - job.started_at)
+            duration = job.completed_at - job.started_at
+            job.actual_duration_seconds = int(duration.total_seconds())
 
         self.queue.update_job(job)
         self.queue.mark_completed(job.job_id)

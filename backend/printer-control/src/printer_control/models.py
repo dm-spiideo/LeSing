@@ -1,12 +1,11 @@
 """Pydantic data models for printer control."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel, Field, field_validator, IPvAnyAddress
-
+from pydantic import BaseModel, Field, IPvAnyAddress, field_validator
 
 # ============================================================================
 # Print Job Models
@@ -54,7 +53,8 @@ class PrintJob(BaseModel):
 
     # Timing
     created_at: datetime = Field(
-        default_factory=datetime.utcnow, description="Job creation timestamp"
+        default_factory=lambda: datetime.now(UTC),
+        description="Job creation timestamp",
     )
     started_at: datetime | None = Field(None, description="Print start timestamp")
     completed_at: datetime | None = Field(None, description="Print completion")
@@ -252,7 +252,8 @@ class PrinterStatus(BaseModel):
     # Metadata
     firmware_version: str | None = Field(None, description="Printer firmware version")
     last_updated: datetime = Field(
-        default_factory=datetime.utcnow, description="Last status update"
+        default_factory=lambda: datetime.now(UTC),
+        description="Last status update",
     )
 
     def can_accept_job(self) -> bool:
@@ -282,7 +283,9 @@ class QueueState(BaseModel):
 
     # Metadata
     version: int = Field(1, description="Queue state schema version")
-    last_modified: datetime = Field(default_factory=datetime.utcnow)
+    last_modified: datetime = Field(
+        default_factory=lambda: datetime.now(UTC)
+    )
 
     def total_jobs(self) -> int:
         """Total number of jobs in queue."""
@@ -301,14 +304,14 @@ class QueueState(BaseModel):
         """Add job to pending queue."""
         if job_id not in self.pending:
             self.pending.append(job_id)
-            self.last_modified = datetime.utcnow()
+            self.last_modified = datetime.now(UTC)
 
     def move_to_active(self, job_id: str) -> bool:
         """Move job from pending to active."""
         if job_id in self.pending:
             self.pending.remove(job_id)
             self.active.append(job_id)
-            self.last_modified = datetime.utcnow()
+            self.last_modified = datetime.now(UTC)
             return True
         return False
 
@@ -317,7 +320,7 @@ class QueueState(BaseModel):
         if job_id in self.active:
             self.active.remove(job_id)
             self.completed.append(job_id)
-            self.last_modified = datetime.utcnow()
+            self.last_modified = datetime.now(UTC)
             return True
         return False
 
@@ -330,7 +333,7 @@ class QueueState(BaseModel):
 
         if job_id not in self.failed:
             self.failed.append(job_id)
-            self.last_modified = datetime.utcnow()
+            self.last_modified = datetime.now(UTC)
             return True
         return False
 
@@ -359,6 +362,8 @@ class PrintCommand(BaseModel):
     parameters: dict[str, Any] | None = Field(None, description="Additional parameters")
 
     # Execution metadata
-    issued_at: datetime = Field(default_factory=datetime.utcnow)
+    issued_at: datetime = Field(
+        default_factory=lambda: datetime.now(UTC)
+    )
     executed_at: datetime | None = None
     acknowledged: bool = Field(False, description="Printer acknowledged command")

@@ -1,8 +1,6 @@
 """Shared test fixtures for printer control tests."""
 
-import json
 from pathlib import Path
-from typing import Generator
 
 import pytest
 

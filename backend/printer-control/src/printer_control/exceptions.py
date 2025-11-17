@@ -1,12 +1,13 @@
 """Exception hierarchy for printer control."""
 
-from datetime import datetime
+from datetime import UTC, datetime
+from typing import Any
 
 
 class PrinterControlError(Exception):
     """Base exception for all printer control errors."""
 
-    def __init__(self, message: str, details: dict[str, any] | None = None):
+    def __init__(self, message: str, details: dict[str, Any] | None = None):
         """Initialize exception with message and optional details.
 
         Args:
@@ -16,7 +17,7 @@ class PrinterControlError(Exception):
         super().__init__(message)
         self.message = message
         self.details = details or {}
-        self.timestamp = datetime.utcnow()
+        self.timestamp = datetime.now(UTC)
 
     def __str__(self) -> str:
         """Format error message with details."""

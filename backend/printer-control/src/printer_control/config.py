@@ -1,8 +1,6 @@
 """Configuration management for printer control."""
 
-import os
 from pathlib import Path
-from typing import Any
 
 import yaml
 from pydantic import ValidationError as PydanticValidationError
@@ -66,11 +64,11 @@ def load_config_from_yaml(yaml_path: Path) -> PrinterConfig:
         )
 
     try:
-        with open(yaml_path, "r") as f:
+        with open(yaml_path) as f:
             data = yaml.safe_load(f)
     except yaml.YAMLError as e:
         raise ValidationError(
-            f"Invalid YAML in configuration file",
+            "Invalid YAML in configuration file",
             details={"path": str(yaml_path), "error": str(e)},
         ) from e
 
@@ -78,7 +76,7 @@ def load_config_from_yaml(yaml_path: Path) -> PrinterConfig:
         return PrinterConfig(**data)
     except PydanticValidationError as e:
         raise ValidationError(
-            f"Invalid printer configuration",
+            "Invalid printer configuration",
             details={"path": str(yaml_path), "errors": e.errors()},
         ) from e
 
@@ -171,6 +169,6 @@ def save_config_to_yaml(config: PrinterConfig, yaml_path: Path) -> None:
             yaml.dump(config_dict, f, default_flow_style=False, sort_keys=False)
     except (OSError, yaml.YAMLError) as e:
         raise ValidationError(
-            f"Failed to save configuration to file",
+            "Failed to save configuration to file",
             details={"path": str(yaml_path), "error": str(e)},
         ) from e

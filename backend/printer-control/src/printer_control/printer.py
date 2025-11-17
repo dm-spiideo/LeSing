@@ -116,7 +116,7 @@ class BambuLabPrinter:
             # bambulabs_api may raise various exceptions
             if "authentication" in str(e).lower() or "access code" in str(e).lower():
                 raise AuthenticationError(
-                    f"Invalid access code or serial number",
+                    "Invalid access code or serial number",
                     details={
                         "printer_id": self.config.printer_id,
                         "error": str(e),
@@ -124,7 +124,7 @@ class BambuLabPrinter:
                 ) from e
             else:
                 raise ConnectionError(
-                    f"Failed to connect to printer",
+                    "Failed to connect to printer",
                     details={
                         "printer_id": self.config.printer_id,
                         "ip": str(self.config.ip),
@@ -230,7 +230,7 @@ class BambuLabPrinter:
 
             if remote_size != local_size:
                 raise UploadError(
-                    f"File size mismatch after upload",
+                    "File size mismatch after upload",
                     details={
                         "expected": local_size,
                         "actual": remote_size,
@@ -252,7 +252,7 @@ class BambuLabPrinter:
         except Exception as e:
             if "530" in str(e) or "authentication" in str(e).lower():
                 raise AuthenticationError(
-                    f"FTP authentication failed",
+                    "FTP authentication failed",
                     details={
                         "printer_id": self.config.printer_id,
                         "error": str(e),
@@ -260,7 +260,7 @@ class BambuLabPrinter:
                 ) from e
             else:
                 raise UploadError(
-                    f"FTP upload failed",
+                    "FTP upload failed",
                     details={
                         "printer_id": self.config.printer_id,
                         "filename": remote_name,
@@ -305,7 +305,7 @@ class BambuLabPrinter:
 
         except Exception as e:
             raise CommandError(
-                f"Failed to start print",
+                "Failed to start print",
                 details={
                     "printer_id": self.config.printer_id,
                     "filename": filename,
@@ -338,7 +338,7 @@ class BambuLabPrinter:
 
         except Exception as e:
             raise CommandError(
-                f"Failed to pause print",
+                "Failed to pause print",
                 details={"printer_id": self.config.printer_id, "error": str(e)},
             ) from e
 
@@ -367,7 +367,7 @@ class BambuLabPrinter:
 
         except Exception as e:
             raise CommandError(
-                f"Failed to cancel print",
+                "Failed to cancel print",
                 details={"printer_id": self.config.printer_id, "error": str(e)},
             ) from e
 
@@ -400,7 +400,7 @@ class BambuLabPrinter:
 
         except Exception as e:
             raise ConnectionError(
-                f"Failed to get printer status",
+                "Failed to get printer status",
                 details={"printer_id": self.config.printer_id, "error": str(e)},
             ) from e
 

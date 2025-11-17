@@ -2,7 +2,7 @@
 
 import pytest
 
-from printer_control.exceptions import QueueError, ValidationError
+from printer_control.exceptions import ValidationError
 from printer_control.models import PrintJobStatus
 from printer_control.queue import PrintQueue
 
