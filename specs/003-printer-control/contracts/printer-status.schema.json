@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lesign.io/schemas/printer-control/printer-status.json",
+  "title": "PrinterStatus",
+  "description": "Real-time operational state of the Bambu Lab H2D printer (from MQTT)",
+  "type": "object",
+  "required": [
+    "state",
+    "connection_state",
+    "progress_percent",
+    "current_layer",
+    "total_layers",
+    "nozzle_temp",
+    "bed_temp",
+    "remaining_time_minutes",
+    "last_update"
+  ],
+  "properties": {
+    "state": {
+      "type": "string",
+      "description": "Primary operational state",
+      "enum": ["idle", "printing", "paused", "error", "offline"]
+    },
+    "connection_state": {
+      "type": "string",
+      "description": "Network connection status",
+      "enum": ["connected", "disconnected"]
+    },
+    "current_job_id": {
+      "type": ["string", "null"],
+      "description": "Job ID if printer is printing",
+      "default": null
+    },
+    "progress_percent": {
+      "type": "integer",
+      "description": "Print completion percentage",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "current_layer": {
+      "type": "integer",
+      "description": "Layer currently being printed",
+      "minimum": 0
+    },
+    "total_layers": {
+      "type": "integer",
+      "description": "Total layers in current job",
+      "minimum": 0
+    },
+    "nozzle_temp": {
+      "type": "number",
+      "description": "Nozzle temperature (°C)",
+      "minimum": 0.0
+    },
+    "bed_temp": {
+      "type": "number",
+      "description": "Bed temperature (°C)",
+      "minimum": 0.0
+    },
+    "chamber_temp": {
+      "type": ["number", "null"],
+      "description": "Chamber temperature (°C) - H2D has active chamber heating",
+      "minimum": 0.0,
+      "default": null
+    },
+    "remaining_time_minutes": {
+      "type": "integer",
+      "description": "Estimated time to completion (minutes)",
+      "minimum": 0
+    },
+    "error_code": {
+      "type": ["string", "null"],
+      "description": "HMS error code if state=error",
+      "default": null
+    },
+    "last_update": {
+      "type": "string",
+      "description": "ISO 8601 timestamp when status was last refreshed",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "state": "printing",
+      "connection_state": "connected",
+      "current_job_id": "job_20251116_001",
+      "progress_percent": 45,
+      "current_layer": 89,
+      "total_layers": 200,
+      "nozzle_temp": 215.0,
+      "bed_temp": 60.0,
+      "chamber_temp": 35.0,
+      "remaining_time_minutes": 27,
+      "error_code": null,
+      "last_update": "2025-11-16T10:42:15Z"
+    },
+    {
+      "state": "idle",
+      "connection_state": "connected",
+      "current_job_id": null,
+      "progress_percent": 0,
+      "current_layer": 0,
+      "total_layers": 0,
+      "nozzle_temp": 25.0,
+      "bed_temp": 23.0,
+      "chamber_temp": 22.0,
+      "remaining_time_minutes": 0,
+      "error_code": null,
+      "last_update": "2025-11-16T10:50:00Z"
+    },
+    {
+      "state": "error",
+      "connection_state": "connected",
+      "current_job_id": "job_20251116_004",
+      "progress_percent": 33,
+      "current_layer": 67,
+      "total_layers": 200,
+      "nozzle_temp": 200.0,
+      "bed_temp": 55.0,
+      "chamber_temp": 30.0,
+      "remaining_time_minutes": 0,
+      "error_code": "0500-0300-0001-0002",
+      "last_update": "2025-11-16T11:15:30Z"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lesign.io/schemas/printer-control/print-request.json",
+  "title": "PrintRequest",
+  "description": "Request to print a 3D model from the slicer component to printer control",
+  "type": "object",
+  "required": [
+    "job_id",
+    "gcode_file_path",
+    "material",
+    "estimated_time_minutes",
+    "estimated_filament_grams"
+  ],
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "description": "Unique identifier for the print job",
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "examples": ["job_20251116_001", "print_sarah_20251116"]
+    },
+    "gcode_file_path": {
+      "type": "string",
+      "description": "Absolute path to G-code file from PrusaSlicer",
+      "minLength": 1,
+      "pattern": "^/.*\\.gcode$",
+      "examples": ["/Users/operator/lesign/output/sign_sarah.gcode"]
+    },
+    "material": {
+      "type": "string",
+      "description": "Filament material type",
+      "enum": ["PLA", "PETG", "ABS"]
+    },
+    "estimated_time_minutes": {
+      "type": "integer",
+      "description": "Estimated print duration from slicer (minutes)",
+      "minimum": 1,
+      "examples": [45, 120, 30]
+    },
+    "estimated_filament_grams": {
+      "type": "number",
+      "description": "Estimated filament consumption (grams)",
+      "minimum": 0.0,
+      "examples": [75.0, 125.5, 50.2]
+    },
+    "priority": {
+      "type": "integer",
+      "description": "Job priority (higher values print sooner)",
+      "minimum": 0,
+      "default": 0,
+      "examples": [0, 1, 10]
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "job_id": "job_20251116_001",
+      "gcode_file_path": "/Users/operator/lesign/output/sign_sarah.gcode",
+      "material": "PLA",
+      "estimated_time_minutes": 45,
+      "estimated_filament_grams": 75.0,
+      "priority": 0
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lesign.io/schemas/printer-control/job-status.json",
+  "title": "JobStatus",
+  "description": "Real-time status of a print job (query response)",
+  "type": "object",
+  "required": [
+    "job_id",
+    "status",
+    "progress_percent"
+  ],
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "description": "Unique job identifier",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "description": "Current job status",
+      "enum": ["queued", "uploading", "printing", "completed", "failed", "cancelled"]
+    },
+    "progress_percent": {
+      "type": "integer",
+      "description": "Print completion percentage",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "current_layer": {
+      "type": ["integer", "null"],
+      "description": "Layer currently being printed",
+      "minimum": 0,
+      "default": null
+    },
+    "total_layers": {
+      "type": ["integer", "null"],
+      "description": "Total layers in model",
+      "minimum": 0,
+      "default": null
+    },
+    "nozzle_temp": {
+      "type": ["number", "null"],
+      "description": "Current nozzle temperature (°C)",
+      "minimum": 0.0,
+      "default": null
+    },
+    "bed_temp": {
+      "type": ["number", "null"],
+      "description": "Current bed temperature (°C)",
+      "minimum": 0.0,
+      "default": null
+    },
+    "chamber_temp": {
+      "type": ["number", "null"],
+      "description": "Current chamber temperature (°C) - H2D specific",
+      "minimum": 0.0,
+      "default": null
+    },
+    "remaining_time_minutes": {
+      "type": ["integer", "null"],
+      "description": "Estimated time remaining (minutes)",
+      "minimum": 0,
+      "default": null
+    },
+    "queue_position": {
+      "type": ["integer", "null"],
+      "description": "Position in queue if status=queued",
+      "minimum": 1,
+      "default": null
+    },
+    "error_code": {
+      "type": ["string", "null"],
+      "description": "HMS error code if status=failed",
+      "default": null
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "job_id": "job_20251116_001",
+      "status": "printing",
+      "progress_percent": 45,
+      "current_layer": 89,
+      "total_layers": 200,
+      "nozzle_temp": 215.0,
+      "bed_temp": 60.0,
+      "chamber_temp": 35.0,
+      "remaining_time_minutes": 27,
+      "queue_position": null,
+      "error_code": null
+    },
+    {
+      "job_id": "job_20251116_002",
+      "status": "queued",
+      "progress_percent": 0,
+      "current_layer": null,
+      "total_layers": null,
+      "nozzle_temp": null,
+      "bed_temp": null,
+      "chamber_temp": null,
+      "remaining_time_minutes": null,
+      "queue_position": 2,
+      "error_code": null
+    }
+  ]
+}

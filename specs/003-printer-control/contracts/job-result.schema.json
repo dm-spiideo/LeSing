@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lesign.io/schemas/printer-control/job-result.json",
+  "title": "JobResult",
+  "description": "Result of print job submission from printer control to requesting component",
+  "type": "object",
+  "required": [
+    "job_id",
+    "status"
+  ],
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "description": "Unique identifier matching the submitted job",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "description": "Current job status",
+      "enum": ["queued", "uploading", "printing", "completed", "failed", "cancelled"]
+    },
+    "queue_position": {
+      "type": ["integer", "null"],
+      "description": "Position in queue (1-indexed), null if not queued",
+      "minimum": 1,
+      "default": null
+    },
+    "started_at": {
+      "type": ["string", "null"],
+      "description": "ISO 8601 timestamp when print started",
+      "format": "date-time",
+      "default": null
+    },
+    "completed_at": {
+      "type": ["string", "null"],
+      "description": "ISO 8601 timestamp when print completed/failed",
+      "format": "date-time",
+      "default": null
+    },
+    "error_message": {
+      "type": ["string", "null"],
+      "description": "Human-readable error explanation if status=failed",
+      "default": null
+    },
+    "actual_print_time_minutes": {
+      "type": ["integer", "null"],
+      "description": "Actual print duration (completed_at - started_at)",
+      "minimum": 0,
+      "default": null
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "job_id": "job_20251116_001",
+      "status": "printing",
+      "queue_position": null,
+      "started_at": "2025-11-16T10:35:00Z",
+      "completed_at": null,
+      "error_message": null,
+      "actual_print_time_minutes": null
+    },
+    {
+      "job_id": "job_20251116_002",
+      "status": "queued",
+      "queue_position": 2,
+      "started_at": null,
+      "completed_at": null,
+      "error_message": null,
+      "actual_print_time_minutes": null
+    },
+    {
+      "job_id": "job_20251116_003",
+      "status": "completed",
+      "queue_position": null,
+      "started_at": "2025-11-16T10:00:00Z",
+      "completed_at": "2025-11-16T10:45:00Z",
+      "error_message": null,
+      "actual_print_time_minutes": 45
+    },
+    {
+      "job_id": "job_20251116_004",
+      "status": "failed",
+      "queue_position": null,
+      "started_at": "2025-11-16T11:00:00Z",
+      "completed_at": "2025-11-16T11:15:00Z",
+      "error_message": "Filament runout detected. Cause: No filament in extruder. Resolution: Load filament and retry.",
+      "actual_print_time_minutes": 15
+    }
+  ]
+}
